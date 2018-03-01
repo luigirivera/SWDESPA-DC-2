@@ -95,7 +95,7 @@ public class CalendarProgram {
 
 	/* Added this */
 	public void refreshTileEvents(int day, int row, int column) throws NullPointerException {
-		EventStringFormatter esformatter = new HTMLEventStringFormatter();
+		EventStringFormatter esformatter = new HTMLEventMarkerFormatter();
 		CellStringFormatter csformatter = new HTMLCellStringFormatter();
 
 		modelCalendarTable.setValueAt(csformatter.format(day,
