@@ -120,8 +120,8 @@ public class CalendarView extends JFrame{
 		for (int i = 0; i < 7; i++) {
 			modelCalendarTable.addColumn(headers[i]);
 		}
-		System.out.println(calendarTable.getParent());
-		//calendarTable.getParent().setBackground(calendarTable.getBackground()); // Set background
+		
+		calendarTable.getParent().setBackground(calendarTable.getBackground()); // Set background
 
 		calendarTable.getTableHeader().setResizingAllowed(false);
 		calendarTable.getTableHeader().setReorderingAllowed(false);
