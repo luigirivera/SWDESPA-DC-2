@@ -29,7 +29,6 @@ import designchallenge1.EventStringFormatter;
 import designchallenge1.HTMLCellStringFormatter;
 import designchallenge1.HTMLEventStringFormatter;
 import designchallenge1.IOEventReader;
-import designchallenge1.TableRenderer;
 
 public class CalendarView extends JFrame{
 	/**** Day Components ****/
@@ -57,47 +56,40 @@ public class CalendarView extends JFrame{
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (Exception e) {
 		}
-		
-		//Added this
-		
-		
+
 		instantiate();
+		init();
+		generateCalendar();
 		
 		setResizable(false);
 		setVisible(true);
 		setSize(1060, 750);
 		setLayout(null);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-
-
-		
-		calendarTable.addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent evt) {
-				int col = calendarTable.getSelectedColumn();
-				int row = calendarTable.getSelectedRow();
-				try {
-					int day = validCells.getDayAtCell(row, col);
-					EventReader er = new IOEventReader(monthToday, day, yearToday);
-					List<CalendarEvent> cevts = er.readEvents();
-					if (cevts.size()>0) {
-						calendarModel.addEvents(cevts);
-						calendarModel.outputEvents();
-					}
-				} catch (IllegalArgumentException e) {
-					System.out.println(e.getMessage());
-				}
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+	}
+	
+	private void instantiate() {
+		monthLabel = new JLabel("January");
+		yearLabel = new JLabel("Change year:");
+		cmbYear = new JComboBox();
+		btnPrev = new JButton("<<");
+		btnNext = new JButton(">>");
+		modelCalendarTable = new DefaultTableModel() {
+			public boolean isCellEditable(int rowIndex, int mColIndex) {
+				return false;
 			}
-		});
-
-
-
+		};
+		validCells = new CellDataHolder();
+		calendarTable = new JTable(modelCalendarTable);
+		scrollCalendarTable = new JScrollPane(calendarTable);
+		calendarPanel = new JPanel();
+	}
+	
+	private void init() {
 		calendarPanel.setBorder(BorderFactory.createTitledBorder("Calendar"));
-
-		btnPrev.addActionListener(new btnPrev_Action());
-		btnNext.addActionListener(new btnNext_Action());
-		cmbYear.addActionListener(new cmbYear_Action());
-
+		
+		calendarPanel.setLayout(null);
+		
 		add(calendarPanel);
 		calendarPanel.add(monthLabel);
 		calendarPanel.add(yearLabel);
@@ -113,9 +105,10 @@ public class CalendarView extends JFrame{
 		btnPrev.setBounds(20, 50, 100, 50);
 		btnNext.setBounds(520, 50, 100, 50);
 		scrollCalendarTable.setBounds(20, 100, 600, 500);
-
 		
-
+	}
+	
+	private void generateCalendar() {
 		GregorianCalendar cal = new GregorianCalendar();
 		dayBound = cal.get(GregorianCalendar.DAY_OF_MONTH);
 		monthBound = cal.get(GregorianCalendar.MONTH);
@@ -127,8 +120,8 @@ public class CalendarView extends JFrame{
 		for (int i = 0; i < 7; i++) {
 			modelCalendarTable.addColumn(headers[i]);
 		}
-
-		calendarTable.getParent().setBackground(calendarTable.getBackground()); // Set background
+		System.out.println(calendarTable.getParent());
+		//calendarTable.getParent().setBackground(calendarTable.getBackground()); // Set background
 
 		calendarTable.getTableHeader().setResizingAllowed(false);
 		calendarTable.getTableHeader().setReorderingAllowed(false);
@@ -146,23 +139,7 @@ public class CalendarView extends JFrame{
 		}
 		
 		refreshCalendar(monthBound, yearBound); // Refresh calendar
-	}
 	
-	private void instantiate() {
-		monthLabel = new JLabel("January");
-		yearLabel = new JLabel("Change year:");
-		cmbYear = new JComboBox();
-		btnPrev = new JButton("<<");
-		btnNext = new JButton(">>");
-		modelCalendarTable = new DefaultTableModel() {
-			public boolean isCellEditable(int rowIndex, int mColIndex) {
-				return false;
-			}
-		};
-		scrollCalendarTable = new JScrollPane(calendarTable);
-		calendarPanel = new JPanel(null);
-		validCells = new CellDataHolder();
-		calendarTable = new JTable(modelCalendarTable);
 	}
 	
 	public void refreshCalendar(int month, int year) {
@@ -222,6 +199,88 @@ public class CalendarView extends JFrame{
 				esformatter.formatEvents(calendarModel.getEventsAt(yearToday, monthToday, day))), row, column);
 	}
 	
+	// ------------LISTENERS------------//
+	public void addbtnNextListener(ActionListener e) {
+		btnNext.addActionListener(e);
+	}
+	
+	public void addbtnPrevListener(ActionListener e) {
+		btnPrev.addActionListener(e);
+	}
+	
+	public void addcmbYearListener(ActionListener e) {
+		cmbYear.addActionListener(e);
+	}
+	
+	
+	// ------------GETTERS AND SETTERS------------//
+	public int getYearToday() {
+		return yearToday;
+	}
+
+	public void setYearToday(int yearToday) {
+		this.yearToday = yearToday;
+	}
+
+	public int getMonthToday() {
+		return monthToday;
+	}
+
+	public void setMonthToday(int monthToday) {
+		this.monthToday = monthToday;
+	}
+
+	public JButton getBtnPrev() {
+		return btnPrev;
+	}
+
+	public void setBtnPrev(JButton btnPrev) {
+		this.btnPrev = btnPrev;
+	}
+
+	public JButton getBtnNext() {
+		return btnNext;
+	}
+
+	public void setBtnNext(JButton btnNext) {
+		this.btnNext = btnNext;
+	}
+
+	public JComboBox getCmbYear() {
+		return cmbYear;
+	}
+
+	public void setCmbYear(JComboBox cmbYear) {
+		this.cmbYear = cmbYear;
+	}
+
+	public JTable getCalendarTable() {
+		return calendarTable;
+	}
+
+	public void setCalendarTable(JTable calendarTable) {
+		this.calendarTable = calendarTable;
+	}
+
+	public CalendarModel getCalendarModel() {
+		return calendarModel;
+	}
+
+	public void setCalendarModel(CalendarModel calendarModel) {
+		this.calendarModel = calendarModel;
+	}
+
+	public CellDataHolder getValidCells() {
+		return validCells;
+	}
+
+	public void setValidCells(CellDataHolder validCells) {
+		this.validCells = validCells;
+	}
+
+
+
+
 	class CellData {
 		private int day;
 		private int row;
@@ -293,37 +352,5 @@ public class CalendarView extends JFrame{
 
 	}
 
-	class btnPrev_Action implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			if (monthToday == 0) {
-				monthToday = 11;
-				yearToday -= 1;
-			} else {
-				monthToday -= 1;
-			}
-			refreshCalendar(monthToday, yearToday);
-		}
-	}
 
-	class btnNext_Action implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			if (monthToday == 11) {
-				monthToday = 0;
-				yearToday += 1;
-			} else {
-				monthToday += 1;
-			}
-			refreshCalendar(monthToday, yearToday);
-		}
-	}
-
-	class cmbYear_Action implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			if (cmbYear.getSelectedItem() != null) {
-				String b = cmbYear.getSelectedItem().toString();
-				yearToday = Integer.parseInt(b);
-				refreshCalendar(monthToday, yearToday);
-			}
-		}
-	}
 }
