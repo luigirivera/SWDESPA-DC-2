@@ -27,7 +27,7 @@ import designchallenge1.CalendarProgram.btnNext_Action;
 import designchallenge1.CalendarProgram.btnPrev_Action;
 import designchallenge1.CalendarProgram.cmbYear_Action;
 
-public class CalendarView {
+public class CalendarView extends JFrame{
 	/**** Day Components ****/
 	public int yearBound, monthBound, dayBound, yearToday, monthToday;
 
@@ -35,7 +35,6 @@ public class CalendarView {
 	public JLabel monthLabel, yearLabel;
 	public JButton btnPrev, btnNext;
 	public JComboBox cmbYear;
-	public JFrame frmMain;
 	public Container pane;
 	public JScrollPane scrollCalendarTable;
 	public JPanel calendarPanel;
@@ -49,6 +48,7 @@ public class CalendarView {
 	private CellDataHolder validCells;
 
 	public CalendarView() {
+		super("Calendar Application");
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (Exception e) {
@@ -57,11 +57,10 @@ public class CalendarView {
 		//Added this
 		validCells = new CellDataHolder();
 
-		frmMain = new JFrame("Calendar Application");
-		frmMain.setSize(1060, 750);
-		pane = frmMain.getContentPane();
-		pane.setLayout(null);
-		frmMain.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		setSize(1060, 750);
+		setLayout(null);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		monthLabel = new JLabel("January");
 		yearLabel = new JLabel("Change year:");
@@ -118,8 +117,8 @@ public class CalendarView {
 		btnNext.setBounds(520, 50, 100, 50);
 		scrollCalendarTable.setBounds(20, 100, 600, 500);
 
-		frmMain.setResizable(false);
-		frmMain.setVisible(true);
+		setResizable(false);
+		setVisible(true);
 
 		GregorianCalendar cal = new GregorianCalendar();
 		dayBound = cal.get(GregorianCalendar.DAY_OF_MONTH);
