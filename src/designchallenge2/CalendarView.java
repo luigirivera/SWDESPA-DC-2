@@ -32,19 +32,19 @@ import designchallenge1.IOEventReader;
 
 public class CalendarView extends JFrame{
 	/**** Day Components ****/
-	public int yearBound, monthBound, dayBound, yearToday, monthToday;
+	private int yearBound, monthBound, dayBound, yearToday, monthToday;
 
 	/**** Swing Components ****/
-	public JLabel monthLabel, yearLabel;
-	public JButton btnPrev, btnNext;
-	public JComboBox cmbYear;
-	public Container pane;
-	public JScrollPane scrollCalendarTable;
-	public JPanel calendarPanel;
+	private JLabel monthLabel, yearLabel;
+	private JButton btnPrev, btnNext;
+	private JComboBox cmbYear;
+	private Container pane;
+	private JScrollPane scrollCalendarTable;
+	private JPanel calendarPanel;
 
 	/**** Calendar Table Components ***/
-	public JTable calendarTable;
-	public DefaultTableModel modelCalendarTable;
+	private JTable calendarTable;
+	private DefaultTableModel modelCalendarTable;
 
 	/**** Added during the project ****/
 	private CalendarModel calendarModel;
@@ -52,19 +52,22 @@ public class CalendarView extends JFrame{
 
 	public CalendarView() {
 		super("Calendar Application");
+		
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (Exception e) {
 		}
-
+		setLayout(null);
+		setSize(1060, 750);
+		
 		instantiate();
 		init();
 		generateCalendar();
 		
 		setResizable(false);
 		setVisible(true);
-		setSize(1060, 750);
-		setLayout(null);
+		
+		
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 	
@@ -120,7 +123,7 @@ public class CalendarView extends JFrame{
 		for (int i = 0; i < 7; i++) {
 			modelCalendarTable.addColumn(headers[i]);
 		}
-		
+
 		calendarTable.getParent().setBackground(calendarTable.getBackground()); // Set background
 
 		calendarTable.getTableHeader().setResizingAllowed(false);
