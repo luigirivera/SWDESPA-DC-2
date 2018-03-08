@@ -4,11 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.List;
-
-import designchallenge1.CalendarEvent;
-import designchallenge1.EventReader;
-import designchallenge1.IOEventReader;
 
 public class CalendarController {
 	private CalendarView view;
@@ -20,7 +15,7 @@ public class CalendarController {
 	public void init() {
 		view.addbtnNextListener(new btnNext_Action());
 		view.addbtnPrevListener(new btnPrev_Action());
-		view.addcmbYearListener(new cmbYear_Action());
+		view.addcalendarListener(new calendarTableMouseListener());
 	}
 	
 	class btnPrev_Action implements ActionListener {
@@ -46,16 +41,6 @@ public class CalendarController {
 			view.refreshCalendar(view.getMonthToday(), view.getYearToday());
 		}
 	}
-
-	class cmbYear_Action implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			if (view.getCmbYear().getSelectedItem() != null) {
-				String b = view.getCmbYear().getSelectedItem().toString();
-				view.setYearToday(Integer.parseInt(b));
-				view.refreshCalendar(view.getMonthToday(), view.getYearToday());
-			}
-		}
-	}
 	
 	class calendarTableMouseListener implements MouseListener{
 
@@ -63,16 +48,15 @@ public class CalendarController {
 		public void mouseClicked(MouseEvent evt) {
 			int col = view.getCalendarTable().getSelectedColumn();
 			int row = view.getCalendarTable().getSelectedRow();
+			
 			try {
 				int day = view.getValidCells().getDayAtCell(row, col);
-				EventReader er = new IOEventReader(view.getMonthToday(), day, view.getYearToday());
-				List<CalendarEvent> cevts = er.readEvents();
-				if (cevts.size()>0) {
-					view.getCalendarModel().addEvents(cevts);
-					view.getCalendarModel().outputEvents();
-				}
+				view.getDayLabel().setText(view.getMonths()[view.getMonthToday()] + " " + day + ", " + view.getYearToday());
+				// TODO: show the day/agenda for that day
+				
 			} catch (IllegalArgumentException e) {
-				System.out.println(e.getMessage());
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 

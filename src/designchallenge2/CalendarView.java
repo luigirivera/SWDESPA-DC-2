@@ -1,22 +1,29 @@
 package designchallenge2;
 
+import java.awt.Color;
 import java.awt.Container;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.JToggleButton;
 import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
@@ -33,14 +40,20 @@ import designchallenge1.IOEventReader;
 public class CalendarView extends JFrame{
 	/**** Day Components ****/
 	private int yearBound, monthBound, dayBound, yearToday, monthToday;
+	private String[] months = { "January", "February", "March", "April", "May", "June", "July", "August", "September",
+			"October", "November", "December" };
 
 	/**** Swing Components ****/
-	private JLabel monthLabel, yearLabel;
-	private JButton btnPrev, btnNext;
-	private JComboBox cmbYear;
+	private JLabel monthLabel, titleLabel, dayLabel, topMonthLabel, filter;
+	private JTextField createName, date, startTime, endTime;
+	
+	private JButton btnPrev, btnNext, create, today, thisWeek, thisMonth, save, discard;
+	private JToggleButton day, agenda;
+	private JRadioButton eventRB, taskRB;
 	private Container pane;
 	private JScrollPane scrollCalendarTable;
-	private JPanel calendarPanel;
+	private JPanel calendarPanel, topPanel, createPanel, dayPanel, agendaPanel;
+	private JCheckBox event, task;
 
 	/**** Calendar Table Components ***/
 	private JTable calendarTable;
@@ -57,57 +70,106 @@ public class CalendarView extends JFrame{
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (Exception e) {
 		}
+		
 		setLayout(null);
-		setSize(1060, 750);
+		setSize(950, 750);
 		
 		instantiate();
 		init();
 		generateCalendar();
 		
-		setResizable(false);
-		setVisible(true);
-		
-		
+		//setResizable(false);
+		setVisible(true);	
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 	
 	private void instantiate() {
 		monthLabel = new JLabel("January");
-		yearLabel = new JLabel("Change year:");
-		cmbYear = new JComboBox();
-		btnPrev = new JButton("<<");
-		btnNext = new JButton(">>");
+		dayLabel = new JLabel("September 31, 2016");
+		topMonthLabel = new JLabel("January");
+		titleLabel = new JLabel("My Productivity Tool");
+		filter = new JLabel("Filter");
+		btnPrev = new JButton("<");
+		btnNext = new JButton(">");
+		create = new JButton("Create");
+		today = new JButton("Today");
+		thisWeek = new JButton("This Week");
+		thisMonth = new JButton("This Month");
+		day = new JToggleButton("Day");
+		agenda = new JToggleButton("Agenda");
+		event = new JCheckBox("Event");
+		task = new JCheckBox("Task");
+
+		
 		modelCalendarTable = new DefaultTableModel() {
 			public boolean isCellEditable(int rowIndex, int mColIndex) {
 				return false;
 			}
 		};
+		
 		validCells = new CellDataHolder();
 		calendarTable = new JTable(modelCalendarTable);
 		scrollCalendarTable = new JScrollPane(calendarTable);
 		calendarPanel = new JPanel();
+		topPanel = new JPanel();
+		createPanel = new JPanel();
 	}
 	
 	private void init() {
-		calendarPanel.setBorder(BorderFactory.createTitledBorder("Calendar"));
-		
+		topPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		createPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		calendarPanel.setLayout(null);
+		topPanel.setLayout(null);
+		createPanel.setLayout(null);
+		
+		titleLabel.setFont(new Font("Arial", Font.BOLD, 25));
+		dayLabel.setFont(new Font("Arial", Font.BOLD, 25));
+		monthLabel.setFont(new Font("Arial", Font.PLAIN, 15));
+		topMonthLabel.setFont(new Font("Arial", Font.BOLD, 15));
+		filter.setFont(new Font("Arial", Font.BOLD, 15));
 		
 		add(calendarPanel);
 		calendarPanel.add(monthLabel);
-		calendarPanel.add(yearLabel);
-		calendarPanel.add(cmbYear);
 		calendarPanel.add(btnPrev);
 		calendarPanel.add(btnNext);
 		calendarPanel.add(scrollCalendarTable);
-
-		calendarPanel.setBounds(0, 0, 640, 670);
-		monthLabel.setBounds(320 - monthLabel.getPreferredSize().width / 2, 50, 200, 50);
-		yearLabel.setBounds(20, 610, 160, 40);
-		cmbYear.setBounds(460, 610, 160, 40);
-		btnPrev.setBounds(20, 50, 100, 50);
-		btnNext.setBounds(520, 50, 100, 50);
-		scrollCalendarTable.setBounds(20, 100, 600, 500);
+		calendarPanel.add(create);
+		calendarPanel.add(filter);
+		calendarPanel.add(event);
+		calendarPanel.add(task);
+		
+		add(topPanel);
+		topPanel.add(titleLabel);
+		topPanel.add(today);
+		topPanel.add(thisWeek);
+		topPanel.add(thisMonth);
+		topPanel.add(day);
+		topPanel.add(agenda);
+		topPanel.add(dayLabel);
+		//topPanel.add(topMonthLabel);
+		
+		add(createPanel);
+		
+		
+		topPanel.setBounds(0,0,this.getWidth(), 70);
+		titleLabel.setBounds(10, 10, 250, 50);
+		today.setBounds(270, 15, 100, 40);
+		thisWeek.setBounds(270, 15, 100, 40);
+		thisMonth.setBounds(270, 15, 100, 40);
+		dayLabel.setBounds(390, 10, 250, 50);
+		topMonthLabel.setBounds(390, 10, 150, 50);
+		day.setBounds(755, 15, 70, 40);
+		agenda.setBounds(820, 15, 70, 40);
+		
+		calendarPanel.setBounds(0, 70, 270, 660);
+		create.setBounds(10, 10, 250, 40);
+		monthLabel.setBounds(10, 50, 200, 50);
+		btnPrev.setBounds(220, 65, 20, 20);
+		btnNext.setBounds(240, 65, 20, 20);
+		scrollCalendarTable.setBounds(10, 100, 250, 480);
+		filter.setBounds(10, 570, 50,50);
+		event.setBounds(30, 600, 70, 50);
+		task.setBounds(120, 600, 70, 50);
 		
 	}
 	
@@ -136,18 +198,12 @@ public class CalendarView extends JFrame{
 		calendarTable.setRowHeight(76);
 		modelCalendarTable.setColumnCount(7);
 		modelCalendarTable.setRowCount(6);
-
-		for (int i = yearBound - 100; i <= yearBound + 100; i++) {
-			cmbYear.addItem(String.valueOf(i));
-		}
 		
 		refreshCalendar(monthBound, yearBound); // Refresh calendar
 	
 	}
 	
 	public void refreshCalendar(int month, int year) {
-		String[] months = { "January", "February", "March", "April", "May", "June", "July", "August", "September",
-				"October", "November", "December" };
 		int nod, som, i, j;
 
 		btnPrev.setEnabled(true);
@@ -157,10 +213,8 @@ public class CalendarView extends JFrame{
 		if (month == 11 && year >= yearBound + 100)
 			btnNext.setEnabled(false);
 
-		monthLabel.setText(months[month]);
-		monthLabel.setBounds(320 - monthLabel.getPreferredSize().width / 2, 50, 360, 50);
-
-		cmbYear.setSelectedItem("" + year);
+		monthLabel.setText(months[month] + " " + yearToday);
+		monthLabel.setBounds(10, 50, 360, 50);
 
 		for (i = 0; i < 6; i++)
 			for (j = 0; j < 7; j++)
@@ -211,10 +265,9 @@ public class CalendarView extends JFrame{
 		btnPrev.addActionListener(e);
 	}
 	
-	public void addcmbYearListener(ActionListener e) {
-		cmbYear.addActionListener(e);
+	public void addcalendarListener(MouseListener e) {
+		calendarTable.addMouseListener(e);
 	}
-	
 	
 	// ------------GETTERS AND SETTERS------------//
 	public int getYearToday() {
@@ -249,14 +302,6 @@ public class CalendarView extends JFrame{
 		this.btnNext = btnNext;
 	}
 
-	public JComboBox getCmbYear() {
-		return cmbYear;
-	}
-
-	public void setCmbYear(JComboBox cmbYear) {
-		this.cmbYear = cmbYear;
-	}
-
 	public JTable getCalendarTable() {
 		return calendarTable;
 	}
@@ -281,8 +326,29 @@ public class CalendarView extends JFrame{
 		this.validCells = validCells;
 	}
 
+	public JLabel getDayLabel() {
+		return dayLabel;
+	}
 
+	public void setDayLabel(JLabel dayLabel) {
+		this.dayLabel = dayLabel;
+	}
 
+	public JLabel getTopMonthLabel() {
+		return topMonthLabel;
+	}
+
+	public void setTopMonthLabel(JLabel topMonthLabel) {
+		this.topMonthLabel = topMonthLabel;
+	}
+
+	public String[] getMonths() {
+		return months;
+	}
+
+	public void setMonths(String[] months) {
+		this.months = months;
+	}
 
 	class CellData {
 		private int day;
