@@ -1,7 +1,7 @@
-package designchallenge1;
+package designchallenge2;
 
 public class DesignChallenge2 {
 	public static void main(String[] args) {
-		new CalendarView();
+		new CalendarController(new CalendarView());
 	}
 }

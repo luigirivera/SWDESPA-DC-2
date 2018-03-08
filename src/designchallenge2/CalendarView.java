@@ -1,4 +1,4 @@
-package designchallenge1;
+package designchallenge2;
 
 import java.awt.Container;
 import java.awt.event.ActionEvent;
@@ -21,11 +21,15 @@ import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 
-import designchallenge1.CalendarProgram.CellData;
-import designchallenge1.CalendarProgram.CellDataHolder;
-import designchallenge1.CalendarProgram.btnNext_Action;
-import designchallenge1.CalendarProgram.btnPrev_Action;
-import designchallenge1.CalendarProgram.cmbYear_Action;
+import designchallenge1.CalendarEvent;
+import designchallenge1.CalendarModel;
+import designchallenge1.CellStringFormatter;
+import designchallenge1.EventReader;
+import designchallenge1.EventStringFormatter;
+import designchallenge1.HTMLCellStringFormatter;
+import designchallenge1.HTMLEventStringFormatter;
+import designchallenge1.IOEventReader;
+import designchallenge1.TableRenderer;
 
 public class CalendarView extends JFrame{
 	/**** Day Components ****/
@@ -55,25 +59,19 @@ public class CalendarView extends JFrame{
 		}
 		
 		//Added this
-		validCells = new CellDataHolder();
-
 		
+		
+		instantiate();
+		
+		setResizable(false);
+		setVisible(true);
 		setSize(1060, 750);
 		setLayout(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		monthLabel = new JLabel("January");
-		yearLabel = new JLabel("Change year:");
-		cmbYear = new JComboBox();
-		btnPrev = new JButton("<<");
-		btnNext = new JButton(">>");
-		modelCalendarTable = new DefaultTableModel() {
-			public boolean isCellEditable(int rowIndex, int mColIndex) {
-				return false;
-			}
-		};
 
-		calendarTable = new JTable(modelCalendarTable);
+
+		
 		calendarTable.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent evt) {
 				int col = calendarTable.getSelectedColumn();
@@ -92,8 +90,7 @@ public class CalendarView extends JFrame{
 			}
 		});
 
-		scrollCalendarTable = new JScrollPane(calendarTable);
-		calendarPanel = new JPanel(null);
+
 
 		calendarPanel.setBorder(BorderFactory.createTitledBorder("Calendar"));
 
@@ -101,7 +98,7 @@ public class CalendarView extends JFrame{
 		btnNext.addActionListener(new btnNext_Action());
 		cmbYear.addActionListener(new cmbYear_Action());
 
-		pane.add(calendarPanel);
+		add(calendarPanel);
 		calendarPanel.add(monthLabel);
 		calendarPanel.add(yearLabel);
 		calendarPanel.add(cmbYear);
@@ -117,8 +114,7 @@ public class CalendarView extends JFrame{
 		btnNext.setBounds(520, 50, 100, 50);
 		scrollCalendarTable.setBounds(20, 100, 600, 500);
 
-		setResizable(false);
-		setVisible(true);
+		
 
 		GregorianCalendar cal = new GregorianCalendar();
 		dayBound = cal.get(GregorianCalendar.DAY_OF_MONTH);
@@ -150,6 +146,23 @@ public class CalendarView extends JFrame{
 		}
 		
 		refreshCalendar(monthBound, yearBound); // Refresh calendar
+	}
+	
+	private void instantiate() {
+		monthLabel = new JLabel("January");
+		yearLabel = new JLabel("Change year:");
+		cmbYear = new JComboBox();
+		btnPrev = new JButton("<<");
+		btnNext = new JButton(">>");
+		modelCalendarTable = new DefaultTableModel() {
+			public boolean isCellEditable(int rowIndex, int mColIndex) {
+				return false;
+			}
+		};
+		scrollCalendarTable = new JScrollPane(calendarTable);
+		calendarPanel = new JPanel(null);
+		validCells = new CellDataHolder();
+		calendarTable = new JTable(modelCalendarTable);
 	}
 	
 	public void refreshCalendar(int month, int year) {
