@@ -211,11 +211,11 @@ public class CalendarView extends JFrame{
 		day.setBounds(785, 15, 70, 40);
 		agenda.setBounds(850, 15, 70, 40);
 		
-		calendarPanel.setBounds(0, 70, 270, 610);
+		calendarPanel.setBounds(0, 70, 270, 620);
 		create.setBounds(10, 10, 250, 40);
 		monthLabel.setBounds(10, 50, 200, 50);
-		btnPrev.setBounds(220, 65, 20, 20);
-		btnNext.setBounds(240, 65, 20, 20);
+		btnPrev.setBounds(220, 65, 30, 20);
+		btnNext.setBounds(240, 65, 30, 20);
 		scrollCalendarTable.setBounds(10, 100, 250, 380);
 		filter.setBounds(10, 500, 50,50);
 		event.setBounds(30, 520, 70, 50);
