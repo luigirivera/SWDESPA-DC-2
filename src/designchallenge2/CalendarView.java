@@ -85,7 +85,7 @@ public class CalendarView extends JFrame{
 		init();
 		generateCalendar();
 		
-		//setResizable(false);
+		setResizable(false);
 		setVisible(true);	
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
@@ -139,7 +139,6 @@ public class CalendarView extends JFrame{
 	}
 	
 	private void init() {
-		calendarPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		topPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		createPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		
