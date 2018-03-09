@@ -28,7 +28,9 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
 import javax.swing.UIManager;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import designchallenge1.CalendarEvent;
@@ -47,10 +49,10 @@ public class CalendarView extends JFrame{
 			"October", "November", "December" };
 
 	/**** Swing Components ****/
-	private JLabel monthLabel, titleLabel, dayLabel, topMonthLabel, filter, createTOLabel;
+	private JLabel monthLabel, titleLabel, dayLabel, filter, createTOLabel;
 	private JTextField createName, date, startTime, endTime;
 	
-	private JButton btnPrev, btnNext, create, today, thisWeek, thisMonth, save, discard;
+	private JButton btnPrev, btnNext, create, today, save, discard;
 	private JToggleButton day, agenda;
 	private JRadioButton eventRB, taskRB;
 	private Container pane;
@@ -69,6 +71,9 @@ public class CalendarView extends JFrame{
 	private final String createPlaceholderDate = "Date";
 	private final String createPlaceholderStart = "Start Time";
 	private final String createPlaceholderEnd = "End Time";
+	private JTable dayTable;
+	private DefaultTableModel modelDayTable;
+	private JScrollPane scrollDayTable;
 
 	public CalendarView() {
 		super("Calendar Application");
@@ -84,6 +89,7 @@ public class CalendarView extends JFrame{
 		instantiate();
 		init();
 		generateCalendar();
+		generateDayTable();
 		
 		setResizable(false);
 		setVisible(true);	
@@ -94,10 +100,10 @@ public class CalendarView extends JFrame{
 		calendarPanel = new JPanel();
 		topPanel = new JPanel();
 		createPanel = new JPanel();
+		dayPanel = new JPanel();
 		
 		monthLabel = new JLabel("January");
 		dayLabel = new JLabel("");
-		topMonthLabel = new JLabel("January");
 		titleLabel = new JLabel("My Productivity Tool");
 		filter = new JLabel("Filter");
 		createTOLabel = new JLabel("to");
@@ -106,8 +112,6 @@ public class CalendarView extends JFrame{
 		btnNext = new JButton(">");
 		create = new JButton("Create");
 		today = new JButton("Today");
-		thisWeek = new JButton("This Week");
-		thisMonth = new JButton("This Month");
 		save = new JButton("Save");
 		discard = new JButton("Discard");
 		
@@ -132,16 +136,23 @@ public class CalendarView extends JFrame{
 			}
 		};
 		
+		modelDayTable = new DefaultTableModel() {
+			public boolean isCellEditable(int rowIndex, int mColIndex) {
+				return false;
+			}
+		};
+		
 		validCells = new CellDataHolder();
 		calendarTable = new JTable(modelCalendarTable);
+		dayTable = new JTable(modelDayTable);
 		scrollCalendarTable = new JScrollPane(calendarTable);
-
+		scrollDayTable = new JScrollPane(dayTable);
 	}
 	
 	private void init() {
 		topPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		createPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		
+		dayPanel.setLayout(null);
 		calendarPanel.setLayout(null);
 		topPanel.setLayout(null);
 		createPanel.setLayout(null);
@@ -149,7 +160,6 @@ public class CalendarView extends JFrame{
 		titleLabel.setFont(new Font("Arial", Font.BOLD, 25));
 		dayLabel.setFont(new Font("Arial", Font.BOLD, 25));
 		monthLabel.setFont(new Font("Arial", Font.PLAIN, 15));
-		topMonthLabel.setFont(new Font("Arial", Font.BOLD, 15));
 		filter.setFont(new Font("Arial", Font.BOLD, 15));
 		createTOLabel.setFont(new Font("Arial", Font.BOLD, 15));
 		
@@ -163,6 +173,7 @@ public class CalendarView extends JFrame{
 		createName.setText(createPlaceholderName);
 		
 		eventRB.setSelected(true);
+		today.setEnabled(false);
 		
 		date.setForeground(Color.GRAY);
 		startTime.setForeground(Color.GRAY);
@@ -185,12 +196,9 @@ public class CalendarView extends JFrame{
 		add(topPanel);
 		topPanel.add(titleLabel);
 		topPanel.add(today);
-		topPanel.add(thisWeek);
-		topPanel.add(thisMonth);
 		topPanel.add(day);
 		topPanel.add(agenda);
 		topPanel.add(dayLabel);
-		//topPanel.add(topMonthLabel);
 		
 		add(createPanel);
 		createPanel.add(createName);
@@ -204,13 +212,14 @@ public class CalendarView extends JFrame{
 		createPanel.add(createTOLabel);
 		createPanel.setVisible(false);
 		
+		add(dayPanel);
+		dayPanel.add(scrollDayTable);
+		dayPanel.setVisible(false);
+		
 		topPanel.setBounds(0,0,this.getWidth(), 70);
 		titleLabel.setBounds(10, 10, 250, 50);
 		today.setBounds(280, 15, 100, 40);
-		thisWeek.setBounds(280, 15, 100, 40);
-		thisMonth.setBounds(280, 15, 100, 40);
 		dayLabel.setBounds(450, 10, 250, 50);
-		topMonthLabel.setBounds(450, 10, 150, 50);
 		day.setBounds(785, 15, 70, 40);
 		agenda.setBounds(850, 15, 70, 40);
 		
@@ -234,6 +243,35 @@ public class CalendarView extends JFrame{
 		endTime.setBounds(290, 120, 120, 40);
 		save.setBounds(230, 170, 90, 40);
 		discard.setBounds(320, 170, 90, 40);
+		
+		dayPanel.setBounds(270, 70, this.getWidth() - 270, 610);
+		scrollDayTable.setBounds(20, 20, dayPanel.getWidth()-50, dayPanel.getHeight()-50);
+	}
+	
+	private void generateDayTable() {
+		DefaultTableCellRenderer rightRender = new DefaultTableCellRenderer();
+		rightRender.setHorizontalAlignment(SwingConstants.RIGHT);
+		
+		modelDayTable.addColumn("Time");
+		modelDayTable.addColumn("Event/Task");
+			
+		modelDayTable.setColumnCount(2);
+		modelDayTable.setRowCount(48);
+		
+		dayTable.setShowVerticalLines(true);
+		dayTable.setGridColor(Color.BLACK);
+		dayTable.setRowHeight(75);
+		dayTable.getColumnModel().getColumn(0).setCellRenderer(rightRender);
+		dayTable.getColumnModel().getColumn(0).setPreferredWidth(100);
+		dayTable.getColumnModel().getColumn(1).setPreferredWidth(scrollDayTable.getWidth() - dayTable.getColumnModel().getColumn(0).getWidth() - 45);
+		dayTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		dayTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		dayTable.getTableHeader().setReorderingAllowed(false);
+		
+		for(int i = 0; i < 48; i++)
+			if(i%2==0)
+				dayTable.setValueAt(i/2 + ":00", i, 0);
+				
 	}
 	
 	private void generateCalendar() {
@@ -445,14 +483,6 @@ public class CalendarView extends JFrame{
 		this.dayLabel = dayLabel;
 	}
 
-	public JLabel getTopMonthLabel() {
-		return topMonthLabel;
-	}
-
-	public void setTopMonthLabel(JLabel topMonthLabel) {
-		this.topMonthLabel = topMonthLabel;
-	}
-
 	public String[] getMonths() {
 		return months;
 	}
@@ -563,6 +593,14 @@ public class CalendarView extends JFrame{
 
 	public void setAgenda(JToggleButton agenda) {
 		this.agenda = agenda;
+	}
+	
+	public JPanel getDayPanel() {
+		return dayPanel;
+	}
+
+	public void setDayPanel(JPanel dayPanel) {
+		this.dayPanel = dayPanel;
 	}
 
 
