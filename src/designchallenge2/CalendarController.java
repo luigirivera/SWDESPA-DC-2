@@ -16,6 +16,11 @@ public class CalendarController {
 		view.addbtnNextListener(new btnNext_Action());
 		view.addbtnPrevListener(new btnPrev_Action());
 		view.addcalendarListener(new calendarTableMouseListener());
+		view.addCreateButtonListener(new createbtnListener());
+		view.addCreateSaveButtonListener(new saveCreateBtnListener());
+		view.addCreateDiscardButtonListener(new discardCreateBtnListener());
+		view.addEventRadioButtonListener(new eventRadioBtnListener());
+		view.addTaskRadioButtonListener(new taskRadioBtnListener());
 	}
 	
 	class btnPrev_Action implements ActionListener {
@@ -55,7 +60,6 @@ public class CalendarController {
 				// TODO: show the day/agenda for that day
 				
 			} catch (IllegalArgumentException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -72,5 +76,76 @@ public class CalendarController {
 		@Override
 		public void mouseReleased(MouseEvent arg0) {}
 		
+	}
+	
+	class createbtnListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			view.getCreatePanel().setVisible(true);
+			view.getCreate().setEnabled(false);
+		}
+		
+	}
+	
+	class saveCreateBtnListener implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			view.getCreatePanel().setVisible(false);
+			view.getCreate().setEnabled(true);
+			
+			// TODO: add the day/agenda for that day
+			clearCreatePanel();
+		}
+	}
+	
+	class discardCreateBtnListener implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			view.getCreatePanel().setVisible(false);
+			view.getCreate().setEnabled(true);
+			clearCreatePanel();
+		}
+	}
+	
+	class eventRadioBtnListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			if(view.getEventRB().isSelected())
+			{
+				view.getTaskRB().setSelected(false);
+				view.getCreateTOLabel().setVisible(true);
+				view.getEndTime().setVisible(true);
+				view.getEndTime().setEnabled(true);
+			}
+		}
+		
+	}
+	
+	class taskRadioBtnListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			if(view.getTaskRB().isSelected())
+			{
+				view.getCreateTOLabel().setVisible(false);
+				view.getEndTime().setVisible(false);
+				view.getEventRB().setSelected(false);
+				view.getEndTime().setEnabled(false);
+			}
+				
+			
+		}
+		
+	}
+	
+	private void clearCreatePanel() {
+		view.getCreateName().setText("");
+		view.getDate().setText("");
+		view.getStartTime().setText("");
+		view.getEndTime().setText("");
+		view.getTaskRB().setSelected(false);
+		view.getEventRB().setSelected(false);
 	}
 }
