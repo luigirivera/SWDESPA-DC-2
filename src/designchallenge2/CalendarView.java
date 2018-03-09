@@ -207,7 +207,7 @@ public class CalendarView extends JFrame{
 		thisWeek.setBounds(280, 15, 100, 40);
 		thisMonth.setBounds(280, 15, 100, 40);
 		dayLabel.setBounds(450, 10, 250, 50);
-		topMonthLabel.setBounds(390, 10, 150, 50);
+		topMonthLabel.setBounds(450, 10, 150, 50);
 		day.setBounds(785, 15, 70, 40);
 		agenda.setBounds(850, 15, 70, 40);
 		
