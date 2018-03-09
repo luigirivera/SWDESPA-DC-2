@@ -3,6 +3,7 @@ package designchallenge2;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Font;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusListener;
@@ -169,6 +170,9 @@ public class CalendarView extends JFrame{
 		endTime.setForeground(Color.GRAY);
 		createName.setForeground(Color.GRAY);
 		
+		btnPrev.setMargin(new Insets(0,0,0,0));
+		btnNext.setMargin(new Insets(0,0,0,0));
+		
 		add(calendarPanel);
 		calendarPanel.add(monthLabel);
 		calendarPanel.add(btnPrev);
@@ -214,8 +218,8 @@ public class CalendarView extends JFrame{
 		calendarPanel.setBounds(0, 70, 270, 610);
 		create.setBounds(10, 10, 250, 40);
 		monthLabel.setBounds(10, 50, 200, 50);
-		btnPrev.setBounds(220, 65, 40, 40);
-		btnNext.setBounds(240, 65, 40, 40);
+		btnPrev.setBounds(180, 60, 40, 30);
+		btnNext.setBounds(220, 60, 40, 30);
 		scrollCalendarTable.setBounds(10, 100, 250, 390);
 		filter.setBounds(10, 500, 50,50);
 		event.setBounds(30, 520, 70, 50);
