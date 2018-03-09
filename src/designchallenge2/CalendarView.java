@@ -5,6 +5,8 @@ import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -62,6 +64,10 @@ public class CalendarView extends JFrame{
 	/**** Added during the project ****/
 	private CalendarModel calendarModel;
 	private CellDataHolder validCells;
+	private final String createPlaceholderName = "Name";
+	private final String createPlaceholderDate = "Date";
+	private final String createPlaceholderStart = "Start Time";
+	private final String createPlaceholderEnd = "End Time";
 
 	public CalendarView() {
 		super("Calendar Application");
@@ -89,7 +95,7 @@ public class CalendarView extends JFrame{
 		createPanel = new JPanel();
 		
 		monthLabel = new JLabel("January");
-		dayLabel = new JLabel("September 31, 2016");
+		dayLabel = new JLabel("");
 		topMonthLabel = new JLabel("January");
 		titleLabel = new JLabel("My Productivity Tool");
 		filter = new JLabel("Filter");
@@ -151,6 +157,18 @@ public class CalendarView extends JFrame{
 		startTime.setHorizontalAlignment(JTextField.CENTER);
 		endTime.setHorizontalAlignment(JTextField.CENTER);
 		
+		date.setText(createPlaceholderDate);
+		startTime.setText(createPlaceholderStart);
+		endTime.setText(createPlaceholderEnd);
+		createName.setText(createPlaceholderName);
+		
+		eventRB.setSelected(true);
+		
+		date.setForeground(Color.GRAY);
+		startTime.setForeground(Color.GRAY);
+		endTime.setForeground(Color.GRAY);
+		createName.setForeground(Color.GRAY);
+		
 		add(calendarPanel);
 		calendarPanel.add(monthLabel);
 		calendarPanel.add(btnPrev);
@@ -173,11 +191,11 @@ public class CalendarView extends JFrame{
 		
 		add(createPanel);
 		createPanel.add(createName);
+		createPanel.add(date);
 		createPanel.add(startTime);
+		createPanel.add(endTime);
 		createPanel.add(eventRB);
 		createPanel.add(taskRB);
-		createPanel.add(date);
-		createPanel.add(endTime);
 		createPanel.add(save);
 		createPanel.add(discard);
 		createPanel.add(createTOLabel);
@@ -329,6 +347,34 @@ public class CalendarView extends JFrame{
 	
 	public void addTaskRadioButtonListener(ActionListener e) {
 		taskRB.addActionListener(e);
+	}
+	
+	public void addDayToggleButtonListener(ActionListener e) {
+		day.addActionListener(e);
+	}
+	
+	public void addAgendaToggleButtonListener(ActionListener e) {
+		agenda.addActionListener(e);
+	}
+	
+	public void addCreateNameListener(FocusListener f, KeyListener k) {
+		createName.addFocusListener(f);
+		createName.addKeyListener(k);
+	}
+
+	public void addCreateDateListener(FocusListener f, KeyListener k) {
+		date.addFocusListener(f);
+		date.addKeyListener(k);
+	}
+
+	public void addCreateStartTimeListener(FocusListener f, KeyListener k) {
+		startTime.addFocusListener(f);
+		startTime.addKeyListener(k);
+	}
+
+	public void addCreateEndTimeListener(FocusListener f, KeyListener k) {
+		endTime.addFocusListener(f);
+		endTime.addKeyListener(k);
 	}
 	
 	// ------------GETTERS AND SETTERS------------//
@@ -498,6 +544,22 @@ public class CalendarView extends JFrame{
 
 	public void setCreateTOLabel(JLabel createTOLabel) {
 		this.createTOLabel = createTOLabel;
+	}
+
+	public JToggleButton getDay() {
+		return day;
+	}
+
+	public void setDay(JToggleButton day) {
+		this.day = day;
+	}
+
+	public JToggleButton getAgenda() {
+		return agenda;
+	}
+
+	public void setAgenda(JToggleButton agenda) {
+		this.agenda = agenda;
 	}
 
 
