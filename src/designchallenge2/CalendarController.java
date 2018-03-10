@@ -624,13 +624,13 @@ public class CalendarController {
 		
 		if(pass)
 		{
-			startDate = view.getStartDate().getText().split("/");
+			startDate = view.getStartDate().getText().replace("\\", "/").split("/");
 			startTime = view.getStartTime().getText().split(":");
 				
 			if(view.getEventRB().isSelected())
 			{
 				endTime = view.getEndTime().getText().split(":");
-				endDate = view.getEndDate().getText().split("/");
+				endDate = view.getEndDate().getText().replace("\\", "/").split("/");
 			}
 				
 			
