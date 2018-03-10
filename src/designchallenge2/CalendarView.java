@@ -49,8 +49,8 @@ public class CalendarView extends JFrame{
 			"October", "November", "December" };
 
 	/**** Swing Components ****/
-	private JLabel monthLabel, titleLabel, dayLabel, filter, createTOLabel;
-	private JTextField createName, date, startTime, endTime;
+	private JLabel monthLabel, titleLabel, dayLabel, filter, createTOLabelDate, createTOLabelTime;
+	private JTextField createName, startDate, endDate, startTime, endTime;
 	
 	private JButton btnPrev, btnNext, create, today, save, discard;
 	private JToggleButton day, agenda;
@@ -68,9 +68,10 @@ public class CalendarView extends JFrame{
 	private CalendarModel calendarModel;
 	private CellDataHolder validCells;
 	private final String createPlaceholderName = "Name";
-	private final String createPlaceholderDate = "Date";
-	private final String createPlaceholderStart = "Start Time";
-	private final String createPlaceholderEnd = "End Time";
+	private final String createPlaceholderStartDate = "Start Date";
+	private final String createPlaceholderEndDate = "End Date";
+	private final String createPlaceholderStartTime = "Start Time";
+	private final String createPlaceholderEndTime = "End Time";
 	private JTable dayTable;
 	private DefaultTableModel modelDayTable;
 	private JScrollPane scrollDayTable;
@@ -111,7 +112,8 @@ public class CalendarView extends JFrame{
 		dayLabel = new JLabel("");
 		titleLabel = new JLabel("My Productivity Tool");
 		filter = new JLabel("Filter");
-		createTOLabel = new JLabel("to");
+		createTOLabelDate = new JLabel("to");
+		createTOLabelTime = new JLabel("to");
 		
 		btnPrev = new JButton("<");
 		btnNext = new JButton(">");
@@ -132,8 +134,8 @@ public class CalendarView extends JFrame{
 		createName = new JTextField();
 		startTime = new JTextField();
 		endTime = new JTextField();
-		date = new JTextField();
-
+		startDate = new JTextField();
+		endDate = new JTextField();
 		
 		modelCalendarTable = new DefaultTableModel() {
 			public boolean isCellEditable(int rowIndex, int mColIndex) {
@@ -175,24 +177,28 @@ public class CalendarView extends JFrame{
 		dayLabel.setFont(new Font("Arial", Font.BOLD, 25));
 		monthLabel.setFont(new Font("Arial", Font.PLAIN, 15));
 		filter.setFont(new Font("Arial", Font.BOLD, 15));
-		createTOLabel.setFont(new Font("Arial", Font.BOLD, 15));
+		createTOLabelDate.setFont(new Font("Arial", Font.BOLD, 15));
+		createTOLabelTime.setFont(new Font("Arial", Font.BOLD, 15));
 		
-		date.setHorizontalAlignment(JTextField.CENTER);
+		startDate.setHorizontalAlignment(JTextField.CENTER);
 		startTime.setHorizontalAlignment(JTextField.CENTER);
 		endTime.setHorizontalAlignment(JTextField.CENTER);
+		endDate.setHorizontalAlignment(JTextField.CENTER);
 		
-		date.setText(createPlaceholderDate);
-		startTime.setText(createPlaceholderStart);
-		endTime.setText(createPlaceholderEnd);
+		startDate.setText(createPlaceholderStartDate);
+		startTime.setText(createPlaceholderStartTime);
+		endTime.setText(createPlaceholderEndTime);
 		createName.setText(createPlaceholderName);
+		endDate.setText(createPlaceholderEndDate);
 		
 		eventRB.setSelected(true);
 		today.setEnabled(false);
 		
-		date.setForeground(Color.GRAY);
+		startDate.setForeground(Color.GRAY);
 		startTime.setForeground(Color.GRAY);
 		endTime.setForeground(Color.GRAY);
 		createName.setForeground(Color.GRAY);
+		endDate.setForeground(Color.GRAY);
 		
 		btnPrev.setMargin(new Insets(0,0,0,0));
 		btnNext.setMargin(new Insets(0,0,0,0));
@@ -216,14 +222,16 @@ public class CalendarView extends JFrame{
 		
 		add(createPanel);
 		createPanel.add(createName);
-		createPanel.add(date);
+		createPanel.add(startDate);
+		createPanel.add(endDate);
 		createPanel.add(startTime);
 		createPanel.add(endTime);
 		createPanel.add(eventRB);
 		createPanel.add(taskRB);
 		createPanel.add(save);
 		createPanel.add(discard);
-		createPanel.add(createTOLabel);
+		createPanel.add(createTOLabelDate);
+		createPanel.add(createTOLabelTime);
 		createPanel.setVisible(false);
 		
 		add(dayPanel);
@@ -255,12 +263,14 @@ public class CalendarView extends JFrame{
 		createName.setBounds(10, 30, 400, 40);
 		eventRB.setBounds(40, 70, 70, 50);
 		taskRB.setBounds(150, 70, 70, 50);
-		date.setBounds(10, 120, 120, 40);
-		startTime.setBounds(140, 120, 120, 40);
-		createTOLabel.setBounds(270, 120, 20, 40);
-		endTime.setBounds(290, 120, 120, 40);
-		save.setBounds(230, 170, 90, 40);
-		discard.setBounds(320, 170, 90, 40);
+		startDate.setBounds(10, 120, 120, 40);
+		createTOLabelDate.setBounds(140, 120, 20, 40);
+		endDate.setBounds(160, 120, 120, 40);
+		startTime.setBounds(10, 160, 120, 40);
+		createTOLabelTime.setBounds(140, 160, 20, 40);
+		endTime.setBounds(160, 160, 120, 40);
+		save.setBounds(300, 120, 90, 40);
+		discard.setBounds(300, 160, 90, 40);
 		
 		dayPanel.setBounds(270, 70, this.getWidth() - 270, 610);
 		scrollDayTable.setBounds(20, 20, dayPanel.getWidth()-50, dayPanel.getHeight()-50);
@@ -452,9 +462,14 @@ public class CalendarView extends JFrame{
 		createName.addKeyListener(k);
 	}
 
-	public void addCreateDateListener(FocusListener f, KeyListener k) {
-		date.addFocusListener(f);
-		date.addKeyListener(k);
+	public void addCreateStartDateListener(FocusListener f, KeyListener k) {
+		startDate.addFocusListener(f);
+		startDate.addKeyListener(k);
+	}
+	
+	public void addCreateEndDateListener(FocusListener f, KeyListener k) {
+		endDate.addFocusListener(f);
+		endDate.addKeyListener(k);
 	}
 
 	public void addCreateStartTimeListener(FocusListener f, KeyListener k) {
@@ -465,6 +480,14 @@ public class CalendarView extends JFrame{
 	public void addCreateEndTimeListener(FocusListener f, KeyListener k) {
 		endTime.addFocusListener(f);
 		endTime.addKeyListener(k);
+	}
+	
+	public void addEventCheckBoxListener(ActionListener e) {
+		event.addActionListener(e);
+	}
+	
+	public void addTaskCheckBoxListener(ActionListener e) {
+		task.addActionListener(e);
 	}
 	
 	// ------------GETTERS AND SETTERS------------//
@@ -548,12 +571,12 @@ public class CalendarView extends JFrame{
 		this.createName = createName;
 	}
 
-	public JTextField getDate() {
-		return date;
+	public JTextField getStartDate() {
+		return startDate;
 	}
 
-	public void setDate(JTextField date) {
-		this.date = date;
+	public void setStartDate(JTextField date) {
+		this.startDate = date;
 	}
 
 	public JTextField getStartTime() {
@@ -620,12 +643,12 @@ public class CalendarView extends JFrame{
 		this.createPanel = createPanel;
 	}
 
-	public JLabel getCreateTOLabel() {
-		return createTOLabel;
+	public JLabel getCreateTOLabelDate() {
+		return createTOLabelDate;
 	}
 
-	public void setCreateTOLabel(JLabel createTOLabel) {
-		this.createTOLabel = createTOLabel;
+	public void setCreateTOLabelDate(JLabel createTOLabel) {
+		this.createTOLabelDate = createTOLabel;
 	}
 
 	public JToggleButton getDay() {
@@ -658,6 +681,102 @@ public class CalendarView extends JFrame{
 
 	public void setAgendaPanel(JPanel agendaPanel) {
 		this.agendaPanel = agendaPanel;
+	}
+
+	public JCheckBox getEvent() {
+		return event;
+	}
+
+	public void setEvent(JCheckBox event) {
+		this.event = event;
+	}
+
+	public JCheckBox getTask() {
+		return task;
+	}
+
+	public void setTask(JCheckBox task) {
+		this.task = task;
+	}
+	
+	public JLabel getCreateTOLabelTime() {
+		return createTOLabelTime;
+	}
+
+	public void setCreateTOLabelTime(JLabel createTOLabelTime) {
+		this.createTOLabelTime = createTOLabelTime;
+	}
+
+	public JTextField getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(JTextField endDate) {
+		this.endDate = endDate;
+	}
+
+	public JScrollPane getScrollCalendarTable() {
+		return scrollCalendarTable;
+	}
+
+	public void setScrollCalendarTable(JScrollPane scrollCalendarTable) {
+		this.scrollCalendarTable = scrollCalendarTable;
+	}
+
+	public DefaultTableModel getModelCalendarTable() {
+		return modelCalendarTable;
+	}
+
+	public void setModelCalendarTable(DefaultTableModel modelCalendarTable) {
+		this.modelCalendarTable = modelCalendarTable;
+	}
+
+	public JTable getDayTable() {
+		return dayTable;
+	}
+
+	public void setDayTable(JTable dayTable) {
+		this.dayTable = dayTable;
+	}
+
+	public DefaultTableModel getModelDayTable() {
+		return modelDayTable;
+	}
+
+	public void setModelDayTable(DefaultTableModel modelDayTable) {
+		this.modelDayTable = modelDayTable;
+	}
+
+	public JScrollPane getScrollDayTable() {
+		return scrollDayTable;
+	}
+
+	public void setScrollDayTable(JScrollPane scrollDayTable) {
+		this.scrollDayTable = scrollDayTable;
+	}
+
+	public JTable getAgendaTable() {
+		return agendaTable;
+	}
+
+	public void setAgendaTable(JTable agendaTable) {
+		this.agendaTable = agendaTable;
+	}
+
+	public DefaultTableModel getModelAgendaTable() {
+		return modelAgendaTable;
+	}
+
+	public void setModelAgendaTable(DefaultTableModel modelAgendaTable) {
+		this.modelAgendaTable = modelAgendaTable;
+	}
+
+	public JScrollPane getScrollAgendaTable() {
+		return scrollAgendaTable;
+	}
+
+	public void setScrollAgendaTable(JScrollPane scrollAgendaTable) {
+		this.scrollAgendaTable = scrollAgendaTable;
 	}
 
 

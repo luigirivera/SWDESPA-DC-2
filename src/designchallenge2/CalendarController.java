@@ -16,9 +16,10 @@ public class CalendarController {
 	private CalendarView view;
 	
 	private final String createPlaceholderName = "Name";
-	private final String createPlaceholderDate = "Date";
-	private final String createPlaceholderStart = "Start Time";
-	private final String createPlaceholderEnd = "End Time";
+	private final String createPlaceholderStartDate = "Start Date";
+	private final String createPlaceholderEndDate = "End Date";
+	private final String createPlaceholderStartTime = "Start Time";
+	private final String createPlaceholderEndTime = "End Time";
 	
 	public CalendarController(CalendarView view) {
 		this.view = view;
@@ -36,9 +37,12 @@ public class CalendarController {
 		view.addDayToggleButtonListener(new dayToggleBtnListener());
 		view.addAgendaToggleButtonListener(new agendaToggleBtnListener());
 		view.addCreateNameListener(new createNameFocusListener(), new createNameKeyListener());
-		view.addCreateDateListener(new createDateFocusListener(), new createDateKeyListener());
+		view.addCreateStartDateListener(new createStartDateFocusListener(), new createStartDateKeyListener());
+		view.addCreateEndDateListener(new createEndDateFocusListener(), new createEndDateKeyListener());
 		view.addCreateStartTimeListener(new createStartTimeFocusListener(), new createStartTimeKeyListener());
 		view.addCreateEndTimeListener(new createEndTimeFocusListener(), new createEndTimeKeyListener());
+		view.addEventCheckBoxListener(new eventCheckBoxListener());
+		view.addTaskCheckBoxListener(new taskCheckBoxListener());
 	}
 	
 	class btnPrev_Action implements ActionListener {
@@ -121,7 +125,22 @@ public class CalendarController {
 		public void keyTyped(KeyEvent arg0) {}
 	}
 	
-	class createDateKeyListener implements KeyListener{
+	class createStartDateKeyListener implements KeyListener{
+
+		@Override
+		public void keyPressed(KeyEvent e) {
+			if(e.getKeyCode() == KeyEvent.VK_ENTER)
+				saveCreation();
+		}
+
+		@Override
+		public void keyReleased(KeyEvent arg0) {}
+
+		@Override
+		public void keyTyped(KeyEvent arg0) {}
+	}
+	
+	class createEndDateKeyListener implements KeyListener{
 
 		@Override
 		public void keyPressed(KeyEvent e) {
@@ -186,10 +205,14 @@ public class CalendarController {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			view.getTaskRB().setSelected(false);
-			view.getCreateTOLabel().setVisible(true);
-			view.getEndTime().setVisible(true);
-			view.getEndTime().setEnabled(true);
+			if(view.getEventRB().isSelected())
+				eventRBenable();
+			else
+			{
+				view.getEventRB().setSelected(false);
+				view.getTaskRB().setSelected(true);
+				taskRBenable();
+			}
 		}
 		
 	}
@@ -198,12 +221,14 @@ public class CalendarController {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			view.getCreateTOLabel().setVisible(false);
-			view.getEndTime().setVisible(false);
-			view.getEventRB().setSelected(false);
-			view.getEndTime().setEnabled(false);
-			view.getEndTime().setText(createPlaceholderEnd);
-				
+			if(view.getTaskRB().isSelected())
+				taskRBenable();
+			else
+			{
+				view.getEventRB().setSelected(true);
+				view.getTaskRB().setSelected(false);
+				eventRBenable();
+			}
 			
 		}
 		
@@ -253,6 +278,72 @@ public class CalendarController {
 		
 	}
 	
+	class eventCheckBoxListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			if(view.getEvent().isSelected())
+			{
+				if(view.getTask().isSelected())
+				{
+					//TODO: view both
+				}
+				else
+				{
+					//TODO: view only events
+				}
+			}
+			
+			else
+			{
+				if(view.getTask().isSelected())
+				{
+					//TODO: view only tasks
+				}
+				
+				else
+				{
+					//TODO: view both
+				}
+			}
+			
+		}
+		
+	}
+	
+	class taskCheckBoxListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			if(view.getTask().isSelected())
+			{
+				if(view.getEvent().isSelected())
+				{
+					//TODO: view both
+				}
+				else
+				{
+					//TODO: view only tasks
+				}
+			}
+			
+			else
+			{
+				if(view.getEvent().isSelected())
+				{
+					//TODO: view only events
+				}
+				
+				else
+				{
+					//TODO: view both
+				}
+			}
+			
+		}
+		
+	}
+	
 	class createNameFocusListener implements FocusListener{
 
 		@Override
@@ -277,24 +368,48 @@ public class CalendarController {
 		
 	}
 	
-	class createDateFocusListener implements FocusListener{
+	class createStartDateFocusListener implements FocusListener{
 
 		@Override
 		public void focusGained(FocusEvent arg0) {
-			if(view.getDate().getText().equals(createPlaceholderDate))
+			if(view.getStartDate().getText().equals(createPlaceholderStartDate))
 			{
-				view.getDate().setText("");
-				view.getDate().setForeground(Color.BLACK);
+				view.getStartDate().setText("");
+				view.getStartDate().setForeground(Color.BLACK);
 			}
 			
 		}
 
 		@Override
 		public void focusLost(FocusEvent arg0) {
-			if(view.getDate().getText().equals(""))
+			if(view.getStartDate().getText().equals(""))
 			{
-				view.getDate().setText(createPlaceholderDate);
-				view.getDate().setForeground(Color.GRAY);
+				view.getStartDate().setText(createPlaceholderStartDate);
+				view.getStartDate().setForeground(Color.GRAY);
+			}
+			
+		}
+		
+	}
+	
+	class createEndDateFocusListener implements FocusListener{
+
+		@Override
+		public void focusGained(FocusEvent arg0) {
+			if(view.getEndDate().getText().equals(createPlaceholderEndDate))
+			{
+				view.getEndDate().setText("");
+				view.getEndDate().setForeground(Color.BLACK);
+			}
+			
+		}
+
+		@Override
+		public void focusLost(FocusEvent arg0) {
+			if(view.getEndDate().getText().equals(""))
+			{
+				view.getEndDate().setText(createPlaceholderEndDate);;
+				view.getEndDate().setForeground(Color.GRAY);
 			}
 			
 		}
@@ -305,7 +420,7 @@ public class CalendarController {
 
 		@Override
 		public void focusGained(FocusEvent arg0) {
-			if(view.getStartTime().getText().equals(createPlaceholderStart))
+			if(view.getStartTime().getText().equals(createPlaceholderStartTime))
 			{
 				view.getStartTime().setText("");
 				view.getStartTime().setForeground(Color.BLACK);
@@ -317,7 +432,7 @@ public class CalendarController {
 		public void focusLost(FocusEvent arg0) {
 			if(view.getStartTime().getText().equals(""))
 			{
-				view.getStartTime().setText(createPlaceholderStart);
+				view.getStartTime().setText(createPlaceholderStartTime);
 				view.getStartTime().setForeground(Color.GRAY);
 			}
 			
@@ -329,7 +444,7 @@ public class CalendarController {
 
 		@Override
 		public void focusGained(FocusEvent arg0) {
-			if(view.getEndTime().getText().equals(createPlaceholderEnd))
+			if(view.getEndTime().getText().equals(createPlaceholderEndTime))
 			{
 				view.getEndTime().setText("");
 				view.getEndTime().setForeground(Color.BLACK);
@@ -341,7 +456,7 @@ public class CalendarController {
 		public void focusLost(FocusEvent arg0) {
 			if(view.getEndTime().getText().equals(""))
 			{
-				view.getEndTime().setText(createPlaceholderEnd);
+				view.getEndTime().setText(createPlaceholderEndTime);
 				view.getEndTime().setForeground(Color.GRAY);
 			}
 			
@@ -349,26 +464,70 @@ public class CalendarController {
 		
 	}
 	
+	private void eventRBenable()
+	{
+		view.getTaskRB().setSelected(false);
+		view.getCreateTOLabelDate().setVisible(true);
+		view.getCreateTOLabelTime().setVisible(true);
+		view.getEndTime().setVisible(true);
+		view.getEndTime().setEnabled(true);
+		view.getEndDate().setEnabled(true);
+		view.getEndDate().setVisible(true);
+		
+		view.getStartDate().setBounds(10, 120, 120, 40);
+		view.getStartTime().setBounds(10, 160, 120, 40);
+		view.getSave().setBounds(300, 120, 90, 40);
+		view.getDiscard().setBounds(300, 160, 90, 40);
+	}
+	
+	private void taskRBenable()
+	{
+		view.getEventRB().setSelected(false);
+		view.getCreateTOLabelDate().setVisible(false);
+		view.getCreateTOLabelTime().setVisible(false);
+		view.getEndTime().setVisible(false);
+		view.getEndTime().setEnabled(false);
+		view.getEndTime().setText(createPlaceholderEndTime);
+		view.getEndTime().setForeground(Color.GRAY);
+		view.getEndDate().setEnabled(false);
+		view.getEndDate().setVisible(false);
+		view.getEndDate().setText(createPlaceholderEndDate);
+		view.getEndDate().setForeground(Color.GRAY);
+		
+		view.getStartDate().setBounds(70, 120, 120, 40);
+		view.getStartTime().setBounds(70, 160, 120, 40);
+		view.getSave().setBounds(230, 120, 90, 40);
+		view.getDiscard().setBounds(230, 160, 90, 40);
+	}
+	
 	private void clearCreatePanel() {
 		view.getCreateName().setText(createPlaceholderName);
 		view.getCreateName().setForeground(Color.GRAY);
-		view.getDate().setText(createPlaceholderDate);
-		view.getDate().setForeground(Color.GRAY);
-		view.getStartTime().setText(createPlaceholderStart);
+		view.getStartDate().setText(createPlaceholderStartDate);
+		view.getStartDate().setForeground(Color.GRAY);
+		view.getStartTime().setText(createPlaceholderStartTime);
 		view.getStartTime().setForeground(Color.GRAY);
-		view.getEndTime().setText(createPlaceholderEnd);
+		view.getEndTime().setText(createPlaceholderEndTime);
 		view.getEndTime().setForeground(Color.GRAY);
+		view.getEndDate().setText(createPlaceholderEndDate);
+		view.getEndDate().setForeground(Color.GRAY);
 		view.getTaskRB().setSelected(false);
 		view.getEventRB().setSelected(true);
-		view.getCreateTOLabel().setVisible(true);
+		view.getCreateTOLabelDate().setVisible(true);
+		view.getCreateTOLabelTime().setVisible(true);
 		view.getEndTime().setVisible(true);
 		view.getEndTime().setEnabled(true);
+		view.getEndDate().setVisible(true);
+		view.getEndDate().setEnabled(true);
+		
+		view.getStartDate().setBounds(10, 120, 120, 40);
+		view.getStartTime().setBounds(10, 160, 120, 40);
+		view.getSave().setBounds(300, 120, 90, 40);
+		view.getDiscard().setBounds(300, 160, 90, 40);
 	}
 	
 	private void saveCreation() {
-		String[] date;
-		String[] startTime;
-		String[] endTime;
+		String[] startDate, endDate, startTime, endTime;
 		boolean pass = true;
 		
 		if(view.getCreateName().getText().equals(createPlaceholderName) || view.getCreateName().getText().isEmpty())
@@ -377,21 +536,27 @@ public class CalendarController {
 			pass = false;
 		}
 		
-		if(view.getDate().getText().equals(createPlaceholderDate) || view.getDate().getText().isEmpty())
+		if(view.getStartDate().getText().equals(createPlaceholderStartDate) || view.getStartDate().getText().isEmpty())
 		{
-			JOptionPane.showMessageDialog(null, "Please enter a date", "Error", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Please enter a starting date", "Error", JOptionPane.ERROR_MESSAGE);
 			pass = false;
 		}
 		
-		if(view.getStartTime().getText().equals(createPlaceholderStart) || view.getStartTime().getText().isEmpty())
+		if((view.getEndDate().getText().equals(createPlaceholderEndDate) || view.getEndDate().getText().isEmpty()) && view.getEventRB().isSelected())
 		{
-			JOptionPane.showMessageDialog(null, "Please enter a start time", "Error", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Please enter an ending date", "Error", JOptionPane.ERROR_MESSAGE);
 			pass = false;
 		}
 		
-		if((view.getEndTime().getText().equals(createPlaceholderEnd) || view.getEndTime().getText().isEmpty()) && view.getEventRB().isSelected())
+		if(view.getStartTime().getText().equals(createPlaceholderStartTime) || view.getStartTime().getText().isEmpty())
 		{
-			JOptionPane.showMessageDialog(null, "Please enter an end time", "Error", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Please enter a starting time", "Error", JOptionPane.ERROR_MESSAGE);
+			pass = false;
+		}
+		
+		if((view.getEndTime().getText().equals(createPlaceholderEndTime) || view.getEndTime().getText().isEmpty()) && view.getEventRB().isSelected())
+		{
+			JOptionPane.showMessageDialog(null, "Please enter an ending time", "Error", JOptionPane.ERROR_MESSAGE);
 			pass = false;
 		}
 		
@@ -400,13 +565,17 @@ public class CalendarController {
 		
 		if(pass)
 		{
-			date = view.getDate().getText().split("/");
+			startDate = view.getStartDate().getText().split("/");
 			startTime = view.getStartTime().getText().split(":");
 				
 			if(view.getEventRB().isSelected())
+			{
 				endTime = view.getEndTime().getText().split(":");
+				endDate = view.getEndDate().getText().split("/");
+			}
+				
 			
-			// TODO: add the day/agenda for that day
+			// TODO: add the task/event for that day to both JTables
 
 		}
 		clearCreatePanel();
