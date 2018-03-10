@@ -21,7 +21,9 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -78,6 +80,8 @@ public class CalendarView extends JFrame{
 	private JTable agendaTable;
 	private DefaultTableModel modelAgendaTable;
 	private JScrollPane scrollAgendaTable;
+	private JPopupMenu dayMenu;
+	private JMenuItem delete, markDone, markUndone;
 
 	public CalendarView() {
 		super("Calendar Application");
@@ -137,6 +141,11 @@ public class CalendarView extends JFrame{
 		startDate = new JTextField();
 		endDate = new JTextField();
 		
+		dayMenu = new JPopupMenu();
+		delete = new JMenuItem("Delete");
+		markDone = new JMenuItem("Mark as Done");
+		markUndone = new JMenuItem("Mark as Undone");
+		
 		modelCalendarTable = new DefaultTableModel() {
 			public boolean isCellEditable(int rowIndex, int mColIndex) {
 				return false;
@@ -172,6 +181,10 @@ public class CalendarView extends JFrame{
 		topPanel.setLayout(null);
 		createPanel.setLayout(null);
 		agendaPanel.setLayout(null);
+		
+		dayMenu.add(markDone);
+		dayMenu.add(markUndone);
+		dayMenu.add(delete);
 		
 		titleLabel.setFont(new Font("Arial", Font.BOLD, 25));
 		dayLabel.setFont(new Font("Arial", Font.BOLD, 25));
@@ -490,6 +503,14 @@ public class CalendarView extends JFrame{
 		task.addActionListener(e);
 	}
 	
+	public void addDayTableListener(MouseListener e) {
+		dayTable.addMouseListener(e);
+	}
+	
+	public void addAgendaTableListener(MouseListener e) {
+		agendaTable.addMouseListener(e);
+	}
+	
 	// ------------GETTERS AND SETTERS------------//
 	public int getYearToday() {
 		return yearToday;
@@ -777,6 +798,38 @@ public class CalendarView extends JFrame{
 
 	public void setScrollAgendaTable(JScrollPane scrollAgendaTable) {
 		this.scrollAgendaTable = scrollAgendaTable;
+	}
+
+	public JPopupMenu getDayMenu() {
+		return dayMenu;
+	}
+
+	public void setDayMenu(JPopupMenu dayMenu) {
+		this.dayMenu = dayMenu;
+	}
+
+	public JMenuItem getDelete() {
+		return delete;
+	}
+
+	public void setDelete(JMenuItem delete) {
+		this.delete = delete;
+	}
+
+	public JMenuItem getMarkDone() {
+		return markDone;
+	}
+
+	public void setMarkDone(JMenuItem markDone) {
+		this.markDone = markDone;
+	}
+
+	public JMenuItem getMarkUndone() {
+		return markUndone;
+	}
+
+	public void setMarkUndone(JMenuItem markUndone) {
+		this.markUndone = markUndone;
 	}
 
 

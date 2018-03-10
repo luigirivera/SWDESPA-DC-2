@@ -11,6 +11,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 public class CalendarController {
 	private CalendarView view;
@@ -43,6 +44,8 @@ public class CalendarController {
 		view.addCreateEndTimeListener(new createEndTimeFocusListener(), new createEndTimeKeyListener());
 		view.addEventCheckBoxListener(new eventCheckBoxListener());
 		view.addTaskCheckBoxListener(new taskCheckBoxListener());
+		view.addDayTableListener(new dayTableMouseListener());
+		view.addAgendaTableListener(new agendaTableMouseListener());
 	}
 	
 	class btnPrev_Action implements ActionListener {
@@ -67,6 +70,62 @@ public class CalendarController {
 			}
 			view.refreshCalendar(view.getMonthToday(), view.getYearToday());
 		}
+	}
+	
+	class dayTableMouseListener implements MouseListener{
+
+		@Override
+		public void mouseClicked(MouseEvent arg0) {
+			int row = view.getDayTable().getSelectedRow();
+			if(SwingUtilities.isRightMouseButton(arg0)/*&& if there is an event in that row*/)
+			{
+				//if(not yet marked as done)
+					//enable mark as done and disable mark as undone
+				//else
+					//enable mark as undone and disable mark as done
+				
+				view.getDayMenu().show(view.getDayTable(), arg0.getX(), arg0.getY()); 
+			}
+			
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent arg0) {}
+		@Override
+		public void mouseExited(MouseEvent arg0) {}
+		@Override
+		public void mousePressed(MouseEvent arg0) {}
+		@Override
+		public void mouseReleased(MouseEvent arg0) {}
+		
+	}
+	
+	class agendaTableMouseListener implements MouseListener{
+
+		@Override
+		public void mouseClicked(MouseEvent arg0) {
+			int row = view.getAgendaTable().getSelectedRow();
+			if(SwingUtilities.isRightMouseButton(arg0)/*&& if there is an event in that row*/)
+			{
+				//if(not yet marked as done)
+					//enable mark as done and disable mark as undone
+				//else
+					//enable mark as undone and disable mark as done
+				
+				view.getDayMenu().show(view.getAgendaTable(), arg0.getX(), arg0.getY()); 
+			}
+			
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent arg0) {}
+		@Override
+		public void mouseExited(MouseEvent arg0) {}
+		@Override
+		public void mousePressed(MouseEvent arg0) {}
+		@Override
+		public void mouseReleased(MouseEvent arg0) {}
+		
 	}
 	
 	class calendarTableMouseListener implements MouseListener{
