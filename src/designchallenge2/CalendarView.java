@@ -74,6 +74,9 @@ public class CalendarView extends JFrame{
 	private JTable dayTable;
 	private DefaultTableModel modelDayTable;
 	private JScrollPane scrollDayTable;
+	private JTable agendaTable;
+	private DefaultTableModel modelAgendaTable;
+	private JScrollPane scrollAgendaTable;
 
 	public CalendarView() {
 		super("Calendar Application");
@@ -90,6 +93,7 @@ public class CalendarView extends JFrame{
 		init();
 		generateCalendar();
 		generateDayTable();
+		generateAgendaTable();
 		
 		setResizable(false);
 		setVisible(true);	
@@ -101,6 +105,7 @@ public class CalendarView extends JFrame{
 		topPanel = new JPanel();
 		createPanel = new JPanel();
 		dayPanel = new JPanel();
+		agendaPanel = new JPanel();
 		
 		monthLabel = new JLabel("January");
 		dayLabel = new JLabel("");
@@ -142,11 +147,19 @@ public class CalendarView extends JFrame{
 			}
 		};
 		
+		modelAgendaTable = new DefaultTableModel() {
+			public boolean isCellEditable(int rowIndex, int mColIndex) {
+				return false;
+			}
+		};
+		
 		validCells = new CellDataHolder();
 		calendarTable = new JTable(modelCalendarTable);
 		dayTable = new JTable(modelDayTable);
+		agendaTable = new JTable(modelAgendaTable);
 		scrollCalendarTable = new JScrollPane(calendarTable);
 		scrollDayTable = new JScrollPane(dayTable);
+		scrollAgendaTable = new JScrollPane(agendaTable);
 	}
 	
 	private void init() {
@@ -156,6 +169,7 @@ public class CalendarView extends JFrame{
 		calendarPanel.setLayout(null);
 		topPanel.setLayout(null);
 		createPanel.setLayout(null);
+		agendaPanel.setLayout(null);
 		
 		titleLabel.setFont(new Font("Arial", Font.BOLD, 25));
 		dayLabel.setFont(new Font("Arial", Font.BOLD, 25));
@@ -216,6 +230,10 @@ public class CalendarView extends JFrame{
 		dayPanel.add(scrollDayTable);
 		dayPanel.setVisible(false);
 		
+		add(agendaPanel);
+		agendaPanel.add(scrollAgendaTable);
+		agendaPanel.setVisible(false);
+		
 		topPanel.setBounds(0,0,this.getWidth(), 70);
 		titleLabel.setBounds(10, 10, 250, 50);
 		today.setBounds(280, 15, 100, 40);
@@ -246,6 +264,36 @@ public class CalendarView extends JFrame{
 		
 		dayPanel.setBounds(270, 70, this.getWidth() - 270, 610);
 		scrollDayTable.setBounds(20, 20, dayPanel.getWidth()-50, dayPanel.getHeight()-50);
+		
+		agendaPanel.setBounds(270, 70, this.getWidth() - 270, 610);
+		scrollAgendaTable.setBounds(20, 20, dayPanel.getWidth()-50, dayPanel.getHeight()-50);
+	}
+	
+	private void generateAgendaTable() {
+		DefaultTableCellRenderer rightRender = new DefaultTableCellRenderer();
+		rightRender.setHorizontalAlignment(SwingConstants.RIGHT);
+		rightRender.setOpaque(false);
+		
+		modelAgendaTable.setColumnCount(2);
+		
+		agendaTable.setRowHeight(50);
+		agendaTable.getColumnModel().getColumn(0).setCellRenderer(rightRender);
+		agendaTable.getColumnModel().getColumn(0).setPreferredWidth(150);
+		agendaTable.getColumnModel().getColumn(1).setPreferredWidth(scrollDayTable.getWidth() - dayTable.getColumnModel().getColumn(0).getWidth()-95);
+		agendaTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		agendaTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		agendaTable.getTableHeader().setReorderingAllowed(false);
+		agendaTable.getTableHeader().setResizingAllowed(false);
+		agendaTable.setTableHeader(null);
+		
+		agendaTable.setOpaque(false);
+		scrollAgendaTable.setOpaque(false);
+		scrollAgendaTable.getViewport().setOpaque(false);
+		scrollAgendaTable.setBorder(BorderFactory.createEmptyBorder());
+		agendaTable.setBorder(BorderFactory.createEmptyBorder());
+		agendaTable.setShowGrid(false);
+
+		((DefaultTableCellRenderer)agendaTable.getDefaultRenderer(Object.class)).setOpaque(false);
 	}
 	
 	private void generateDayTable() {
@@ -267,6 +315,7 @@ public class CalendarView extends JFrame{
 		dayTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		dayTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		dayTable.getTableHeader().setReorderingAllowed(false);
+		dayTable.getTableHeader().setResizingAllowed(false);
 		
 		for(int i = 0; i < 48; i++)
 			if(i%2==0)
@@ -601,6 +650,14 @@ public class CalendarView extends JFrame{
 
 	public void setDayPanel(JPanel dayPanel) {
 		this.dayPanel = dayPanel;
+	}
+
+	public JPanel getAgendaPanel() {
+		return agendaPanel;
+	}
+
+	public void setAgendaPanel(JPanel agendaPanel) {
+		this.agendaPanel = agendaPanel;
 	}
 
 

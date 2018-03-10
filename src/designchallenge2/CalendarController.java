@@ -216,14 +216,14 @@ public class CalendarController {
 			if(view.getDay().isSelected())
 			{
 				view.getDayPanel().setVisible(true);
-				//TODO: hide agenda panel
+				view.getAgendaPanel().setVisible(false);
 				view.getAgenda().setSelected(false);
 			}
 			
 			else
 			{
 				view.getAgenda().setSelected(true);
-				// TODO: show agenda panel
+				view.getAgendaPanel().setVisible(true);
 				view.getDayPanel().setVisible(false);
 				view.getDay().setSelected(false);
 			}
@@ -237,7 +237,7 @@ public class CalendarController {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			if (view.getAgenda().isSelected()) {
-				// TODO: show agenda panel
+				view.getAgendaPanel().setVisible(true);
 				view.getDayPanel().setVisible(false);
 				view.getDay().setSelected(false);
 			}
@@ -246,7 +246,7 @@ public class CalendarController {
 			{
 				view.getDay().setSelected(true);
 				view.getDayPanel().setVisible(true);
-				//TODO: hide agenda panel
+				view.getAgendaPanel().setVisible(false);
 				view.getAgenda().setSelected(false);
 			}
 		}
