@@ -51,7 +51,7 @@ public class CalendarView extends JFrame{
 			"October", "November", "December" };
 
 	/**** Swing Components ****/
-	private JLabel monthLabel, titleLabel, dayLabel, filter, createTOLabelDate, createTOLabelTime;
+	private JLabel monthLabel, titleLabel, dayLabel, filter, createTOLabelDate, createTOLabelTime, taskCountLabel;
 	private JTextField createName, startDate, endDate, startTime, endTime;
 	
 	private JButton btnPrev, btnNext, create, today, save, discard;
@@ -118,6 +118,7 @@ public class CalendarView extends JFrame{
 		filter = new JLabel("Filter");
 		createTOLabelDate = new JLabel("to");
 		createTOLabelTime = new JLabel("to");
+		taskCountLabel = new JLabel();
 		
 		btnPrev = new JButton("<");
 		btnNext = new JButton(">");
@@ -186,12 +187,16 @@ public class CalendarView extends JFrame{
 		dayMenu.add(markUndone);
 		dayMenu.add(delete);
 		
+		taskCountLabel.setText("<html><div style='text-align: center;'><body>Tasks Left:<br>(number here)</body></div></html>");
+		
 		titleLabel.setFont(new Font("Arial", Font.BOLD, 25));
 		dayLabel.setFont(new Font("Arial", Font.BOLD, 25));
 		monthLabel.setFont(new Font("Arial", Font.PLAIN, 15));
 		filter.setFont(new Font("Arial", Font.BOLD, 15));
 		createTOLabelDate.setFont(new Font("Arial", Font.BOLD, 15));
 		createTOLabelTime.setFont(new Font("Arial", Font.BOLD, 15));
+		taskCountLabel.setFont(new Font("Arial", Font.BOLD, 15));
+		taskCountLabel.setForeground(Color.decode("#DD0000"));
 		
 		startDate.setHorizontalAlignment(JTextField.CENTER);
 		startTime.setHorizontalAlignment(JTextField.CENTER);
@@ -232,6 +237,7 @@ public class CalendarView extends JFrame{
 		topPanel.add(day);
 		topPanel.add(agenda);
 		topPanel.add(dayLabel);
+		topPanel.add(taskCountLabel);
 		
 		add(createPanel);
 		createPanel.add(createName);
@@ -258,7 +264,8 @@ public class CalendarView extends JFrame{
 		topPanel.setBounds(0,0,this.getWidth(), 70);
 		titleLabel.setBounds(10, 10, 250, 50);
 		today.setBounds(280, 15, 100, 40);
-		dayLabel.setBounds(450, 10, 250, 50);
+		dayLabel.setBounds(400, 10, 250, 50);
+		taskCountLabel.setBounds(660, 5, 100, 60);
 		day.setBounds(785, 15, 70, 40);
 		agenda.setBounds(850, 15, 70, 40);
 		
@@ -830,6 +837,14 @@ public class CalendarView extends JFrame{
 
 	public void setMarkUndone(JMenuItem markUndone) {
 		this.markUndone = markUndone;
+	}
+
+	public JLabel getTaskCountLabel() {
+		return taskCountLabel;
+	}
+
+	public void setTaskCountLabel(JLabel taskCountLabel) {
+		this.taskCountLabel = taskCountLabel;
 	}
 
 
