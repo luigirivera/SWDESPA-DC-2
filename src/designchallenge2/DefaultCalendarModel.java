@@ -6,11 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DefaultCalendarModel implements CalendarModel {
-	private ItemService itemService;
+	private DBItemService itemService;
 	private List<CalendarObserver> observers;
 
 	public DefaultCalendarModel(CalendarDB calendarDB) {
-		this.itemService = new ItemService(calendarDB);
+		this.itemService = new DBItemService(calendarDB);
 		this.observers = new ArrayList<CalendarObserver>();
 	}
 
