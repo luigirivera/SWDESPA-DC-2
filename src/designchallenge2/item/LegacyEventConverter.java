@@ -1,4 +1,4 @@
-package designchallenge2;
+package designchallenge2.item;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +10,7 @@ public class LegacyEventConverter {
 	public static designchallenge1.CalendarEvent convert(CalendarItem item){
 		designchallenge1.CalendarEvent legacyEvent = new CalendarEvent();
 		legacyEvent.setName(item.getName());
-		if(item instanceof designchallenge2.CalendarEvent)
+		if(item instanceof designchallenge2.item.CalendarEvent)
 			legacyEvent.setColor(CalendarColor.BLUE);
 		else
 			legacyEvent.setColor(CalendarColor.GREEN);

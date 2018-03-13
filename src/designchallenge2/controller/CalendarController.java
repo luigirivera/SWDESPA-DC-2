@@ -1,6 +1,9 @@
-package designchallenge2;
+package designchallenge2.controller;
 
 import java.time.LocalDateTime;
+
+import designchallenge2.item.CalendarItem;
+import designchallenge2.item.CalendarTask;
 
 public interface CalendarController {
 	public void addEvent(String name, LocalDateTime start, LocalDateTime end);

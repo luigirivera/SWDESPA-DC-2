@@ -1,4 +1,4 @@
-package designchallenge2;
+package designchallenge2.item;
 
 import java.time.LocalDateTime;
 

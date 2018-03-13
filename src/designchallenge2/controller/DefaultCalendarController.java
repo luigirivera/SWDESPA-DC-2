@@ -1,4 +1,4 @@
-package designchallenge2;
+package designchallenge2.controller;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -13,6 +13,11 @@ import java.time.LocalDateTime;
 
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+
+import designchallenge2.item.CalendarEvent;
+import designchallenge2.item.CalendarItem;
+import designchallenge2.item.CalendarTask;
+import designchallenge2.model.CalendarModel;
 
 public class DefaultCalendarController implements CalendarController{
 	private static final String createPlaceholderName = "Name";

@@ -1,9 +1,14 @@
-package designchallenge2;
+package designchallenge2.model;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
+
+import designchallenge2.item.CalendarItem;
+import designchallenge2.item.CalendarTask;
+import designchallenge2.item.ItemGetFlags;
+import designchallenge2.view.CalendarObserver;
 
 public class DefaultCalendarModel implements CalendarModel {
 	private DBItemService itemService;

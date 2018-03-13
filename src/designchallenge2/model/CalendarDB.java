@@ -1,4 +1,4 @@
-package designchallenge2;
+package designchallenge2.model;
 
 
 import java.sql.Connection;

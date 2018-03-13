@@ -1,8 +1,12 @@
-package designchallenge2;
+package designchallenge2.model;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
+
+import designchallenge2.item.CalendarItem;
+import designchallenge2.item.CalendarTask;
+import designchallenge2.item.ItemGetFlags;
 
 public interface ItemService {
 	public List<CalendarItem> getOn(ItemGetFlags flags, LocalDate date);

@@ -1,4 +1,4 @@
-package designchallenge2;
+package designchallenge2.model;
 
 
 import java.sql.Connection;
@@ -12,6 +12,11 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
+
+import designchallenge2.item.CalendarEvent;
+import designchallenge2.item.CalendarItem;
+import designchallenge2.item.CalendarTask;
+import designchallenge2.item.ItemGetFlags;
 
 public class DBItemService implements ItemService{
 	public static final String TABLE = "ITEM";

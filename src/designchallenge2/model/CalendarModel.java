@@ -1,8 +1,13 @@
-package designchallenge2;
+package designchallenge2.model;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
+
+import designchallenge2.item.CalendarItem;
+import designchallenge2.item.CalendarTask;
+import designchallenge2.item.ItemGetFlags;
+import designchallenge2.view.CalendarObserver;
 
 public interface CalendarModel {
 	public void attach(CalendarObserver obs);

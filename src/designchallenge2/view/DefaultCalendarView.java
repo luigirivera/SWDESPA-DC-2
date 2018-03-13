@@ -1,4 +1,4 @@
-package designchallenge2;
+package designchallenge2.view;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -57,6 +57,13 @@ import designchallenge1.HTMLCellMarkerFormatter;
 import designchallenge1.HTMLCellStringFormatter;
 import designchallenge1.HTMLEventMarkerFormatter;
 import designchallenge1.HTMLEventStringFormatter;
+import designchallenge2.controller.CalendarController;
+import designchallenge2.item.CalendarEvent;
+import designchallenge2.item.CalendarItem;
+import designchallenge2.item.CalendarTask;
+import designchallenge2.item.ItemGetFlags;
+import designchallenge2.item.LegacyEventConverter;
+import designchallenge2.model.CalendarModel;
 
 public class DefaultCalendarView extends JFrame implements CalendarObserver{
 	/**** Day Components ****/

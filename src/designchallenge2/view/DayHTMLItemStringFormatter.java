@@ -1,4 +1,7 @@
-package designchallenge2;
+package designchallenge2.view;
+
+import designchallenge2.item.CalendarItem;
+import designchallenge2.item.CalendarTask;
 
 public class DayHTMLItemStringFormatter implements ItemStringFormatter {
 	private static final String START_TAG = "<html>";
